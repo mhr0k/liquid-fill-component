@@ -2,7 +2,7 @@
 
 A React component that creates smooth, directional hover effects with GSAP animations. The component reveals a fill color from the direction of user interaction, supporting mouse, touch, and keyboard focus events.
 
-![Alt Text](https://github.com/mhr0k/hoverFill/blob/master/showcase.gif)
+![Showcase](https://github.com/mhr0k/hoverFill/blob/master/showcase.gif)
 
 ## Features
 
@@ -11,7 +11,7 @@ A React component that creates smooth, directional hover effects with GSAP anima
 - Customizable colors and opacity
 - Invertible colors with blend mode
 - Configurable animation duration
-- Pinnable state
+- Imperative handle with advanced control methods
 - Forward ref support with animation methods
 
 ## Installation
@@ -26,11 +26,15 @@ npm install gsap @gsap/react
 import HoverFill from './HoverFill';
 
 function App() {
+  const fillRef = useRef(null);
+
   return (
     <HoverFill
-      {/* Must be a positioned element! */}
-      style={{position: relative}}
+      ref={fillRef}
+      style={{ position: 'relative' }}
       as="button"
+      color="blue"
+      duration={0.3}
     >
       Animated button
     </HoverFill>
@@ -40,37 +44,45 @@ function App() {
 
 ## Props
 
-- `as`: Element type to render (default: 'div')
-- `color`: Fill color (default: 'white')
-- `opacity`: Fill opacity (default: 1)
-- `duration`: Animation duration in seconds (default: 0.5)
-- `pin`: Lock the fill state (default: false)
-- `invertColors`: Use difference blend mode (default: true)
-- `mouse`: Enable mouse interactions (default: true)
-- `touch`: Enable touch interactions (default: true)
-- `focus`: Enable keyboard focus (default: true)
-- `focusEnter`: Focus entry direction (default: 'up')
-- `focusLeave`: Focus exit direction (default: 'down')
-- `invertDirection`: Invert animation directions (default: false)
-- `z`: Z-index of the fill effect (default: auto/-1)
+| Prop              | Type                                  | Default          | Description                   |
+| ----------------- | ------------------------------------- | ---------------- | ----------------------------- |
+| `as`              | `ElementType`                         | `'div'`          | Element type to render        |
+| `color`           | `string`                              | `'white'`        | Fill color                    |
+| `opacity`         | `number`                              | `1`              | Fill opacity                  |
+| `duration`        | `number`                              | `0.5`            | Animation duration in seconds |
+| `invertColors`    | `boolean`                             | `true`           | Use difference blend mode     |
+| `mouse`           | `boolean`                             | `true`           | Enable mouse interactions     |
+| `touch`           | `boolean`                             | `true`           | Enable touch interactions     |
+| `focus`           | `boolean`                             | `true`           | Enable keyboard focus         |
+| `focusEnter`      | `'up' \| 'down' \| 'left' \| 'right'` | `'up'`           | Focus entry direction         |
+| `focusLeave`      | `'up' \| 'down' \| 'left' \| 'right'` | `'down'`         | Focus exit direction          |
+| `invertDirection` | `boolean`                             | `undefined`      | Invert animation directions   |
+| `z`               | `'auto' \| number`                    | `'auto'` or `-1` | Z-index of the fill effect    |
 
 ## Methods
 
-Access animation methods via ref:
+Control animations imperatively with methods exposed via ref:
 
 ```jsx
-const fillRef = useRef();
+const fillRef = useRef(null);
 
-// Available methods
-fillRef.current.slideDownOut();
-fillRef.current.slideUpIn();
-fillRef.current.slideUpOut();
-fillRef.current.slideDownIn();
-fillRef.current.slideLeftIn();
-fillRef.current.slideRightIn();
-fillRef.current.slideLeftOut();
-fillRef.current.slideRightOut();
+// Lock/Unlock the fill state
+fillRef.current.lock();
+fillRef.current.unlock();
+
+// Check if mouse is currently over the element
+const isMouseOver = await fillRef.current.checkMouse();
+
+// Manually trigger animations
+fillRef.current.animate('up', 'in');
+fillRef.current.animate('down', 'out');
 ```
+
+## Considerations
+
+- Ensure the parent element has `position: relative` or `position: absolute`
+- Use `z` prop to control layering of the fill effect
+- Disable unnecessary interaction types (`mouse`, `touch`, `focus`) to optimize performance
 
 ## License
 
