@@ -1,5 +1,3 @@
-# HoverFill
-
 A React component that creates smooth, directional hover effects with GSAP animations. The component reveals a fill color from the direction of user interaction, supporting mouse, touch, and keyboard focus events.
 
 ![Showcase](https://github.com/mhr0k/hoverFill/blob/master/showcase.gif)
